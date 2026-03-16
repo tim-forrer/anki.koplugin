@@ -213,11 +213,6 @@ function AnkiNote:build()
                 field_name = conf.image_field:get_value(),
                 args = { self:get_picture_context() }
             },
-            fields = {
-                func = "set_translated_context",
-                field_name = conf.translated_context_field:get_value(),
-                args = { fields[conf.context_field:get_value()] or self:get_word_context(), self:get_language() }
-            },
         },
         -- used as id to detect duplicates when storing notes offline
         identifier = conf.word_field:get_value()

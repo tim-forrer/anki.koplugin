@@ -50,8 +50,6 @@ These settings are configured via a user profile, see [Profiles](profiles/README
   The word selected in the book.
   #### Sentence context (`context_field`)
   The full sentence that the word occured in, extracted from the book.
-  #### Translated Sentence (`translated_context_field`)
-  The translation of the sentence context mentioned above. The target language is inherited from the translation settings in KOReader itself.
   #### Previous sentence count (`prev_sentence_count`)
   Define the amount of sentences which should be prepended to the word you looked up. Set this to `1` to have it complete the sentence the word occured in.
   #### Next sentence count (`next_sentence_count`)
@@ -63,7 +61,7 @@ These settings are configured via a user profile, see [Profiles](profiles/README
   #### Dictionary definition (`def_field`)
   The dictionary entry that was selected when pressing the button.
   #### Audio (`audio_field`)
-  The plugin will query Forvo to get audio for the lookupword. The language used is determined by the dictionary's language, or by the book's language as fallback.
+  The plugin looks up audio from the local `android.db` database (Local Audio Server).
   #### Metadata (`meta_field`)
   Some information about the book: author, title and page number.
   
@@ -140,3 +138,4 @@ When editing a profile which is *not* the default one, it's possible to 'unset' 
 - [x] Populates the `ExpressionFurigana` and `ExpressionReading` fields of the Lapis Anki card template
 - [x] Queries local database for forvo audio
   - [x] Online queries removed entirely
+- [ ] Don't look for translation

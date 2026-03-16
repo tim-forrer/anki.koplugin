@@ -11,7 +11,6 @@ local ConfirmBox = require("ui/widget/confirmbox")
 local InfoMessage = require("ui/widget/infomessage")
 local NetworkMgr = require("ui/network/manager")
 local DataStorage = require("datastorage")
-local Translator = require("ui/translator")
 local local_audio = require("localaudio")
 
 -- http://lua-users.org/wiki/BaseSixtyFour
@@ -136,12 +135,6 @@ function AnkiConnect:POST(opts)
         return nil, json_err
     end
     return response.result
-end
-
-function AnkiConnect:set_translated_context(_, context)
-    local result = Translator:translate(context, Translator:getTargetLanguage(), Translator:getSourceLanguage())
-    logger.info(("Queried translation: '%s' -> '%s'"):format(context, result))
-    return true, result
 end
 
 function AnkiConnect:set_forvo_audio(field, word, language)
