@@ -13,6 +13,7 @@ return {
         [1] = "EXT_furigana.lua",
         ["EXT_furigana.lua"] = true,
     },
+    ["local_audio_offline_only"] = true,
     ["meta_field"] = "MiscInfo",
     ["modelName"] = "Lapis",
     ["next_sentence_count"] = 1,

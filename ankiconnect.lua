@@ -12,8 +12,22 @@ local InfoMessage = require("ui/widget/infomessage")
 local NetworkMgr = require("ui/network/manager")
 local DataStorage = require("datastorage")
 local Translator = require("ui/translator")
-local forvo = require("forvo")
 local local_audio = require("localaudio")
+
+-- http://lua-users.org/wiki/BaseSixtyFour
+local _b64_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+local function base64e(data)
+    return ((data:gsub('.', function(x)
+        local r, b = '', x:byte()
+        for i = 8, 1, -1 do r = r .. (b % 2^i - b % 2^(i-1) > 0 and '1' or '0') end
+        return r
+    end) .. '0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
+        if #x < 6 then return '' end
+        local c = 0
+        for i = 1, 6 do c = c + (x:sub(i,i) == '1' and 2^(6-i) or 0) end
+        return _b64_chars:sub(c+1, c+1)
+    end) .. ({ '', '==', '=' })[#data % 3 + 1])
+end
 local u = require("lua_utils/utils")
 local conf = require("anki_configuration")
 
@@ -98,7 +112,7 @@ function AnkiConnect:POST(opts)
     local url = assert(opts.url, "Missing URL!")
     local scheme, basic_auth, host = url:match("^(https?://)([^:]+:[^@]+)@(.+)")
     if basic_auth then
-        headers["Authorization"] = "Basic " .. forvo.base64e(basic_auth)
+        headers["Authorization"] = "Basic " .. base64e(basic_auth)
         url = scheme .. host
     end
     local sink = {}
@@ -132,14 +146,13 @@ end
 
 function AnkiConnect:set_forvo_audio(field, word, language)
     local db_path = conf.local_audio_db_path:get_value()
-    local offline_only = conf.local_audio_offline_only:get_value()
     local ok_local, local_result = local_audio:get_audio_blob(db_path, word, language)
     if ok_local and local_result then
         logger.info(("Found local audio for '%s' in table '%s'"):format(word, local_result.table or "?"))
         local safe_word = (word or "word"):gsub("[/\\:*?\"<>|]", "_")
         local ext = local_result.ext or "opus"
         return true, {
-            data = forvo.base64e(local_result.data),
+            data = base64e(local_result.data),
             filename = string.format("forvo_%s.%s", safe_word, ext),
             fields = { field }
         }
@@ -149,27 +162,7 @@ function AnkiConnect:set_forvo_audio(field, word, language)
     else
         logger.info(("No local audio found for '%s' (db: %s)"):format(word, db_path or ""))
     end
-
-    if offline_only then
-        logger.info(("Offline-only audio enabled, skipping Forvo lookup for '%s'"):format(word))
-        return true, nil
-    end
-
-    logger.info(("Querying Forvo audio for '%s' in language: %s"):format(word, language))
-    local ok, forvo_url = forvo.get_pronunciation_url(word, language)
-    if not ok then
-        if forvo_url == "FORVO_403" then
-            -- For 403 errors, return true but no audio data
-            logger.warn("Forvo returned 403 error - continuing without audio")
-            return true, nil
-        end
-        return false, ("Could not connect to forvo: %s"):format(forvo_url)
-    end
-    return true, forvo_url and {
-        url = forvo_url,
-        filename = string.format("forvo_%s.ogg", word),
-        fields = { field }
-    } or nil
+    return true, nil
 end
 
 function AnkiConnect:set_image_data(field, img_path)
@@ -181,7 +174,7 @@ function AnkiConnect:set_image_data(field, img_path)
     if not img_f then
         return true
     end
-    local data = forvo.base64e(img_f:read("*a"))
+    local data = base64e(img_f:read("*a"))
     logger.info(("added %d bytes of base64 encoded data"):format(#data))
     os.remove(img_path)
     return true, {

@@ -138,4 +138,5 @@ When editing a profile which is *not* the default one, it's possible to 'unset' 
 # Changes made in this fork
 
 - [x] Populates the `ExpressionFurigana` and `ExpressionReading` fields of the Lapis Anki card template
-- [ ] Queries local database for forvo audio
+- [x] Queries local database for forvo audio
+  - [x] Online queries removed entirely
