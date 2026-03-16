@@ -83,6 +83,19 @@ local menu_entries = {
         name = "Forvo Audio Field",
         description = "Anki field to store Forvo audio in.",
     },
+    {
+        id = "local_audio_db_path",
+        group = general_settings,
+        name = "Local Audio DB Path",
+        description = "Path to android.db used for offline audio lookup.",
+    },
+    {
+        id = "local_audio_offline_only",
+        group = general_settings,
+        name = "Offline Audio Only",
+        description = "When enabled, never query Forvo online if local audio lookup fails.",
+        conf_type = "bool",
+    },
      {
         id = "img_field",
         group = note_settings,

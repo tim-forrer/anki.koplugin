@@ -78,6 +78,8 @@ local Configuration = {
     Setting:new{ id = 'context_field' },
     Setting:new{ id = 'meta_field' },
     Setting:new{ id = 'audio_field' },
+    Setting:new{ id = 'local_audio_db_path', default = DataStorage:getFullDataDir() .. '/data/android.db' },
+    Setting:new{ id = 'local_audio_offline_only', default = false },
     Setting:new{ id = 'image_field' },
     Setting:new{ id = 'translated_context_field' },
     Setting:new{ id = 'prev_sentence_count', default = '1' },

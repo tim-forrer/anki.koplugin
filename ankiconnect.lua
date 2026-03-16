@@ -13,6 +13,7 @@ local NetworkMgr = require("ui/network/manager")
 local DataStorage = require("datastorage")
 local Translator = require("ui/translator")
 local forvo = require("forvo")
+local local_audio = require("localaudio")
 local u = require("lua_utils/utils")
 local conf = require("anki_configuration")
 
@@ -130,6 +131,30 @@ function AnkiConnect:set_translated_context(_, context)
 end
 
 function AnkiConnect:set_forvo_audio(field, word, language)
+    local db_path = conf.local_audio_db_path:get_value()
+    local offline_only = conf.local_audio_offline_only:get_value()
+    local ok_local, local_result = local_audio:get_audio_blob(db_path, word, language)
+    if ok_local and local_result then
+        logger.info(("Found local audio for '%s' in table '%s'"):format(word, local_result.table or "?"))
+        local safe_word = (word or "word"):gsub("[/\\:*?\"<>|]", "_")
+        local ext = local_result.ext or "opus"
+        return true, {
+            data = forvo.base64e(local_result.data),
+            filename = string.format("forvo_%s.%s", safe_word, ext),
+            fields = { field }
+        }
+    end
+    if not ok_local then
+        logger.warn(("Local audio lookup failed for '%s': %s"):format(word, local_result or "unknown error"))
+    else
+        logger.info(("No local audio found for '%s' (db: %s)"):format(word, db_path or ""))
+    end
+
+    if offline_only then
+        logger.info(("Offline-only audio enabled, skipping Forvo lookup for '%s'"):format(word))
+        return true, nil
+    end
+
     logger.info(("Querying Forvo audio for '%s' in language: %s"):format(word, language))
     local ok, forvo_url = forvo.get_pronunciation_url(word, language)
     if not ok then
