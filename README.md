@@ -134,3 +134,8 @@ When editing a profile which is *not* the default one, it's possible to 'unset' 
   If you don't care about having audio, you can leave the `audio_field` blank. This will cause this step to be skipped completely.
     
 </details>
+
+# Changes made in this fork
+
+- [x] Populates the `ExpressionFurigana` and `ExpressionReading` fields of the Lapis Anki card template
+- [ ] Queries local database for forvo audio
