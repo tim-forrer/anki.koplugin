@@ -59,6 +59,14 @@ function AnkiConnect:is_running(url)
     local anki_connect_request = { action = "requestPermission", version = "6" }
     local result, error = self:POST { payload = anki_connect_request, url = url }
     if error or result.permission == "denied" then
+        if error then
+            if error:find("MalformedJsonException", 1, true) then
+                result = { permission = "granted", requireApikey = false }
+                logger.warn("AnkiConnect is launched, but can't process the request, pretend everything is ok:", result)
+                return result
+            end
+            logger.warn("AnkiConnect post result:", error)
+        end
         return false, error or "Permission denied."
     end
     return result
