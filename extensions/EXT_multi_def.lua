@@ -8,6 +8,7 @@ local MultiDefinition = {
     dict_field_map = {
         -- the below example sends dictionary entries from 'JMdict'  to the field 'SentEng' on the anki note
         -- ["JMdict Rev. 1.9"] = "SentEng",
+        ["研究社新和英"] = "Glossary"
     }
 }
 
