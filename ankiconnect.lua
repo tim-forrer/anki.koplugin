@@ -56,7 +56,7 @@ function AnkiConnect:is_running(url)
     if not self.wifi_connected then
         return false, "WiFi disconnected."
     end
-    local anki_connect_request = { action = "requestPermission", version = 6 }
+    local anki_connect_request = { action = "requestPermission", version = "6" }
     local result, error = self:POST { payload = anki_connect_request, url = url }
     if error or result.permission == "denied" then
         return false, error or "Permission denied."
@@ -65,12 +65,12 @@ function AnkiConnect:is_running(url)
 end
 
 function AnkiConnect:get_decknames(url, api_key)
-    local anki_connect_request = { action = "deckNames", version = 6, key = api_key }
+    local anki_connect_request = { action = "deckNames", version = "6", key = api_key }
     return self:POST { payload = anki_connect_request, url = url }
 end
 
 function AnkiConnect:request_add_note(note)
-    local anki_connect_request = { action = "addNote", params = { note = note }, version = 6, key = conf.api_key:get_value() }
+    local anki_connect_request = { action = "addNote", params = { note = note }, version = "6", key = conf.api_key:get_value() }
     return self:POST { payload = anki_connect_request, url = conf.url:get_value() }
 end
 
@@ -262,7 +262,7 @@ function AnkiConnect:delete_latest_note()
         local api_key = conf.api_key:get_value()
         -- don't use rapidjson, the anki note ids are 64bit integers, they are turned into different numbers by the json library
         -- presumably because 32 vs 64 bit architecture
-        local delete_request = ([[{"action": "deleteNotes", "version": 6, "params": {"notes": [%d]}, "key": %s }]]):format(latest.id, api_key and ([["%s"]]):format(api_key) or "null")
+        local delete_request = ([[{"action": "deleteNotes", "version": "6", "params": {"notes": [%d]}, "key": %s }]]):format(latest.id, api_key and ([["%s"]]):format(api_key) or "null")
         local _, err = self:POST { payload = delete_request, url = conf.url:get_value() }
         if err then
             return self:show_popup(("Couldn't delete note: %s!"):format(err), 3, true)
