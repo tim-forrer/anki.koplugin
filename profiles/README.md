@@ -64,6 +64,7 @@ local Config = {
     enabled_extensions = {
         --"EXT_dict_edit.lua",
         --"EXT_dict_word_lookup.lua",
+        --"EXT_furigana.lua",
         --"EXT_multi_def.lua",
         --"EXT_pitch_accent.lua"
     }
