@@ -1,5 +1,7 @@
 # Anki plugin for KOReader
 
+[![Chat](https://img.shields.io/badge/chat-join-green?style=for-the-badge&logo=Telegram&logoColor=green)](https://ajatt.top/blog/join-our-community.html)
+
 KOReader plugin enabling Anki note generation for words looked up in the internal dictionary.
 
 ## Installation
