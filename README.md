@@ -4,6 +4,11 @@
 
 KOReader plugin enabling Anki note generation for words looked up in the internal dictionary.
 
+Since [Ajatt-Tools](https://github.com/Ajatt-Tools) is a distributed effort, we **highly welcome new contributors**!
+[Join the organization](https://github.com/Ajatt-Tools/.github/blob/main/profile/README.md#join-us),
+feel free to browse the [issue tracker](https://github.com/Ajatt-Tools/anki.koplugin/issues) and submit pull requests.
+You can also find us on [DJT](https://ajatt.top/blog/join-our-community.html).
+
 ## Installation
 
 1) Install [AnkiConnect](https://ankiweb.net/shared/info/2055492159) to enable this plugin to communicate with Anki.
